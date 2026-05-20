@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion'; // 1. Import Framer Motion
+import { motion } from 'framer-motion'; 
 import { FaFacebookF, FaLinkedinIn, FaInstagram } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
 import img from '../../../src/assets/360.png';
@@ -24,6 +24,15 @@ const Footer = () => {
     visible: { opacity: 1, y: 0 }
   };
 
+  // Handles smooth scrolling down to specific single-page target sections
+  const handleSmoothScroll = (e, sectionId) => {
+    e.preventDefault();
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   return (
     <footer className="bg-[#005a9c] text-white pt-16 pb-8 relative overflow-hidden font-sans">
       <style>{`
@@ -44,7 +53,7 @@ const Footer = () => {
         }
       `}</style>
 
-      {/* Decorative Background Circles - Subtle Float Animation */}
+      {/* Decorative Background Circles */}
       <motion.div 
         animate={{ rotate: 360 }}
         transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
@@ -89,10 +98,10 @@ const Footer = () => {
               <div className="relative p-[2px] rounded-2xl overflow-hidden z-10">
                 <div className="animate-gradient-rotate"></div>
                 <div className="relative bg-[#005a9c] rounded-[14px] px-5 py-5 z-20 flex gap-4">
-                  <SocialIcon icon={<FaFacebookF />} />
-                  <SocialIcon icon={<FaLinkedinIn />} />
-                  <SocialIcon icon={<FaInstagram />} />
-                  <SocialIcon icon={<FaXTwitter />} />
+                  <SocialIcon href="https://www.facebook.com/profile.php?id=61587297926579" icon={<FaFacebookF />} />
+                  <SocialIcon href="https://www.linkedin.com/company/conversion-matrix-360/" icon={<FaLinkedinIn />} />
+                  <SocialIcon href="https://www.instagram.com/conversionmatrix360official/" icon={<FaInstagram />} />
+                  <SocialIcon href="#home" onClick={(e) => handleSmoothScroll(e, 'home')} icon={<FaXTwitter />} />
                 </div>
               </div>
             </div>
@@ -102,12 +111,12 @@ const Footer = () => {
           <motion.div variants={itemVariants} className="lg:pl-10">
             <h3 className="text-2xl font-bold mb-6">Industries</h3>
             <ul className="space-y-4 text-blue-50 font-medium">
-              <FooterLink label="Insurance" />
-              <FooterLink label="Financial Services" />
-              <FooterLink label="Home services" />
-              <FooterLink label="Legal" />
-              <FooterLink label="Travel" />
-              <FooterLink label="Real Estate" />
+              <FooterLink label="Insurance" href="#industries" onClick={(e) => handleSmoothScroll(e, 'industries')} />
+              <FooterLink label="Financial Services" href="#industries" onClick={(e) => handleSmoothScroll(e, 'industries')} />
+              <FooterLink label="Home services" href="#services" onClick={(e) => handleSmoothScroll(e, 'services')} />
+              <FooterLink label="Legal" href="#industries" onClick={(e) => handleSmoothScroll(e, 'industries')} />
+              <FooterLink label="Travel" href="#industries" onClick={(e) => handleSmoothScroll(e, 'industries')} />
+              <FooterLink label="Real Estate" href="#industries" onClick={(e) => handleSmoothScroll(e, 'industries')} />
             </ul>
           </motion.div>
 
@@ -115,20 +124,26 @@ const Footer = () => {
           <motion.div variants={itemVariants}>
             <h3 className="text-2xl font-bold mb-6">Company</h3>
             <ul className="space-y-4 text-blue-50 font-medium">
-              <FooterLink label="About us" />
-              <FooterLink label="Privacy Policy" />
-              <FooterLink label="Terms and Conditions" />
+              <FooterLink label="About us" href="#about-us" onClick={(e) => handleSmoothScroll(e, 'about-us')} />
+              <FooterLink label="Privacy Policy" href="#" />
+              <FooterLink label="Terms and Conditions" href="#" />
             </ul>
           </motion.div>
 
-          {/* Contact Component Placeholder (Optional 4th col) */}
+          {/* Contact Column */}
           <motion.div variants={itemVariants}>
              <h3 className="text-2xl font-bold mb-6">Contact</h3>
-             <p className="text-sm text-blue-100">Questions? Reach out to our strategy team for a consultation.</p>
+             <p className="text-sm text-blue-100 mb-4">Questions? Reach out to our strategy team for a consultation.</p>
+             <button 
+               onClick={(e) => handleSmoothScroll(e, 'contact-us')}
+               className="text-xs font-semibold bg-white text-[#005a9c] px-4 py-2 rounded-lg hover:bg-cyan-100 transition-colors cursor-pointer border-none outline-none"
+             >
+               Get In Touch
+             </button>
           </motion.div>
         </div>
 
-        {/* Bottom Bar with Drawing Line Animation */}
+        {/* Bottom Bar with Line Animation */}
         <div className="mt-20 relative">
           <motion.div 
             initial={{ width: 0 }}
@@ -139,7 +154,7 @@ const Footer = () => {
           />
           <div className="pt-8 text-center">
             <p className="text-sm font-semibold tracking-wide text-blue-100">
-              © 2025 Leads – www.conversionmatrix360.org Copyright Protected Content
+              © 2026 Leads – www.conversionmatrix360.org Copyright Protected Content
             </p>
           </div>
         </div>
@@ -148,22 +163,28 @@ const Footer = () => {
   );
 };
 
-const SocialIcon = ({ icon }) => (
+// Social icon component handling direct navigation target configurations securely
+const SocialIcon = ({ icon, href, onClick }) => (
   <motion.a 
     whileHover={{ scale: 1.2, rotate: 5 }}
     whileTap={{ scale: 0.9 }}
-    href="#" 
-    className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-[#005a9c] shadow-md"
+    href={href}
+    onClick={onClick}
+    target={href.startsWith('http') ? "_blank" : "_self"}
+    rel="noopener noreferrer"
+    className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-[#005a9c] shadow-md cursor-pointer"
   >
     {icon}
   </motion.a>
 );
 
-const FooterLink = ({ label }) => (
+// Standardised footer links
+const FooterLink = ({ label, href = "#", onClick }) => (
   <li>
     <motion.a 
       whileHover={{ x: 5 }}
-      href="#" 
+      href={href} 
+      onClick={onClick}
       className="hover:text-cyan-300 transition-colors cursor-pointer block"
     >
       {label}
