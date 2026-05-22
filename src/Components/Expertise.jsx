@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion'; // 1. Import Framer Motion
+import { motion } from 'framer-motion'; 
 import { 
   Search, 
   Monitor, 
@@ -16,38 +16,42 @@ import {
 import img from "../assets/360.png";
 
 const services = [
-  { title: "SEARCH ENGINE OPTIMIZATION – SEO", description: "Enhance your online visibility with our professional SEO services. We optimize websites and landing pages to rank higher on search engines.", icon: <Search className="w-8 h-8" /> },
+  { title: "SEARCH ENGINE OPTIMIZATION - SEO", description: "Enhance your online visibility with our professional SEO services. We optimize websites and landing pages to rank higher on search engines.", icon: <Search className="w-8 h-8" /> },
   { title: "WEBSITE DESIGN & DEVELOPMENT", description: "Create a powerful digital presence with our modern website and landing page solutions tailored for inbound calls and lead capture.", icon: <Monitor className="w-8 h-8" /> },
   { title: "SOCIAL MEDIA MARKETING", description: "Engage targeted audiences and build brand trust through social media strategies across Facebook, Instagram, and other platforms.", icon: <Megaphone className="w-8 h-8" /> },
   { title: "INBOUND CALL LEAD GENERATION", description: "Drive high-intent customer calls with our specialized inbound marketing systems for insurance and home service verticals.", icon: <PhoneIncoming className="w-8 h-8" /> },
   { title: "PERFORMANCE MARKETING (PAY-PER-CALL)", description: "Maximize ROI with our performance-based acquisition models. We deliver qualified calls on a cost-per-call or cost-per-lead basis.", icon: <BarChart3 className="w-8 h-8" /> },
-  { title: "GOOGLE ADS – SEARCH & CALL", description: "High-converting Google Ads campaigns designed for inbound calls. From keyword targeting to call-only ads.", icon: <Zap className="w-8 h-8" /> },
+  { title: "GOOGLE ADS - SEARCH & CALL", description: "High-converting Google Ads campaigns designed for inbound calls. From keyword targeting to call-only ads.", icon: <Zap className="w-8 h-8" /> },
   { title: "LANDING PAGE & FUNNEL OPTIMIZATION", description: "Our team designs high-performing landing pages built for maximum call conversion and optimized for mobile users.", icon: <Layers className="w-8 h-8" /> },
   { title: "LIVE TRANSFER & CALL ROUTING", description: "We provide warm, qualified live transfer calls routed directly to your sales agents using smart distribution systems.", icon: <PhoneForwarded className="w-8 h-8" /> },
   { title: "CALL TRACKING & ANALYTICS", description: "Complete call tracking and performance reporting using industry-leading platforms like Ringba and TrackDrive.", icon: <PieChart className="w-8 h-8" /> },
   { title: "COMPLIANCE & VERIFIED LEADS", description: "Strict compliance standards providing TCPA-compliant opt-in data and Jornaya ID lead validation.", icon: <ShieldCheck className="w-8 h-8" /> }
 ];
 
-// Animation Variants
 const containerVariants = {
   hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1 }
-  }
+  visible: { opacity: 1, transition: { staggerChildren: 0.08 } }
 };
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 20, scale: 0.95 },
-  visible: { 
-    opacity: 1, 
-    y: 0, 
-    scale: 1, 
-    transition: { duration: 0.5, ease: "easeOut" } 
-  }
+  hidden: { opacity: 0, y: 25, scale: 0.96 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.45, ease: "easeOut" } }
 };
 
-const ExpertiseSection = () => {
+const ExpertiseSection = ({ setSelectedService, onRedirect }) => {
+  
+  const handleServiceSelection = (serviceTitle) => {
+    if (setSelectedService) {
+      setSelectedService(serviceTitle);
+    }
+    if (onRedirect) {
+      // Small timeout allows asynchronous layout states to settle completely
+      setTimeout(() => {
+        onRedirect();
+      }, 50);
+    }
+  };
+
   return (
     <div className="bg-[#020617] min-h-screen pb-20 px-6 font-sans overflow-hidden text-white">
       <style>
@@ -128,7 +132,7 @@ const ExpertiseSection = () => {
           </motion.h2>
         </div>
 
-        {/* Services Grid with Staggered Animation */}
+        {/* Services Grid */}
         <motion.div 
           variants={containerVariants}
           initial="hidden"
@@ -137,14 +141,16 @@ const ExpertiseSection = () => {
           className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8 md:gap-6"
         >
           {services.map((service, index) => (
-            <motion.div 
+            <motion.button 
               key={index} 
               variants={cardVariants}
-              className="group relative rounded-2xl p-[1.5px] transition-all duration-500 md:hover:-translate-y-3 overflow-hidden"
+              type="button"
+              onClick={() => handleServiceSelection(service.title)}
+              className="group text-left block w-full relative rounded-2xl p-[1.5px] transition-all duration-500 md:hover:-translate-y-3 overflow-hidden bg-transparent border-0 outline-none focus:outline-none cursor-pointer"
             >
               <div className="absolute inset-[-400%] animate-spin-slow button-gradient-rail opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-500" />
 
-              <div className="relative rounded-2xl p-6 flex flex-col h-full z-10 overflow-hidden bg-[#020617]">
+              <div className="relative rounded-2xl p-6 flex flex-col h-full min-h-[310px] z-10 overflow-hidden bg-[#020617]">
                 <div className="absolute inset-0 opacity-20 md:opacity-10 md:group-hover:opacity-30 transition-opacity duration-500" 
                   style={{
                     background: 'radial-gradient(circle at top right, #8B2CF5, #22D3EE, transparent)'
@@ -167,14 +173,14 @@ const ExpertiseSection = () => {
                 </div>
 
                 <div className="flex justify-end mt-auto relative z-20">
-                  <button className="w-8 h-8 lg:w-10 lg:h-10 rounded-full bg-[#22D3EE]/10 md:bg-white/5 border border-[#22D3EE]/30 md:border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-[#22D3EE] group-hover:border-[#22D3EE] group-hover:shadow-[0_0_15px_#22D3EE]">
+                  <div className="w-8 h-8 lg:w-10 lg:h-10 rounded-full bg-[#22D3EE]/10 md:bg-white/5 border border-[#22D3EE]/30 md:border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-[#22D3EE] group-hover:border-[#22D3EE] group-hover:shadow-[0_0_15px_#22D3EE]">
                     <ArrowRight className="w-4 h-4 lg:w-5 lg:h-5 text-[#22D3EE] group-hover:text-[#10143E] transition-transform group-hover:translate-x-1" />
-                  </button>
+                  </div>
                 </div>
               </div>
 
               <div className="absolute inset-0 blur-2xl rounded-2xl -z-10 opacity-30 md:opacity-0 md:group-hover:opacity-40 transition-opacity button-gradient-rail" />
-            </motion.div>
+            </motion.button>
           ))}
         </motion.div>
       </div>

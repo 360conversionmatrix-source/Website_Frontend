@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion'; // 1. Import Framer Motion
+import { motion } from 'framer-motion';
 
 const FeatureCard = ({ number, title, description, index }) => (
   <motion.div 
@@ -22,7 +22,7 @@ const FeatureCard = ({ number, title, description, index }) => (
       </div>
     </div>
 
-    {/* Floating Number - Staggered entrance to match card */}
+    {/* Floating Number */}
     <motion.span 
       initial={{ y: 20, opacity: 0 }}
       whileInView={{ y: 0, opacity: 1 }}
@@ -35,7 +35,7 @@ const FeatureCard = ({ number, title, description, index }) => (
   </motion.div>
 );
 
-function Why() {
+function Why({ onContactClick }) {
   const features = [
     {
       number: "1",
@@ -101,7 +101,10 @@ function Why() {
 
             {/* Animated Border Button */}
             <div className="relative inline-block">
-              <button className="relative flex items-center justify-between min-w-[200px] bg-[#0685B1] text-white font-bold py-[1px] px-[1px] rounded-full overflow-hidden transition-all duration-300 active:scale-95">
+              <button 
+                onClick={onContactClick}
+                className="relative flex items-center justify-between min-w-[200px] bg-[#0685B1] text-white font-bold py-[1px] px-[1px] rounded-full overflow-hidden transition-all duration-300 active:scale-95 cursor-pointer"
+              >
                 <div className="absolute inset-0 w-[200%] h-[200%] top-[-50%] left-[-50%] animate-spin-slow bg-[conic-gradient(from_0deg,transparent_0%,#00f2fe_25%,#7c3aed_50%,#00f2fe_75%,transparent_100%)]"></div>
                 
                 <div className="relative flex items-center justify-between w-full h-full bg-[#0685B1] rounded-full py-3 px-6 z-10">

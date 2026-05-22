@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion'; 
 import img from "/logo.png";
 
-const Navbar = ({ activeLink, setActiveLink }) => {
+const Navbar = ({ activeLink, setActiveLink, setContactType }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navLinks = [
@@ -15,10 +15,13 @@ const Navbar = ({ activeLink, setActiveLink }) => {
     { name: 'Contact Us', id: 'contact-us' },
   ];
 
-  // Helper function to handle smooth scrolling manually across elements
-  const handleNavClick = (linkName, sectionId) => {
+  const handleNavClick = (linkName, sectionId, formValue = null) => {
     setActiveLink(linkName);
     setIsMenuOpen(false);
+    
+    if (formValue && typeof setContactType === 'function') {
+      setContactType(formValue);
+    }
     
     const element = document.getElementById(sectionId);
     if (element) {
@@ -26,14 +29,13 @@ const Navbar = ({ activeLink, setActiveLink }) => {
     }
   };
 
-  // Drop-In Animation Variants
   const dropIn = {
     hidden: { y: -20, opacity: 0 },
     visible: (i) => ({
       y: 0,
       opacity: 1,
       transition: {
-        delay: i * 0.08, // Stagger effect
+        delay: i * 0.08,
         duration: 0.5,
         ease: "easeOut"
       }
@@ -41,7 +43,7 @@ const Navbar = ({ activeLink, setActiveLink }) => {
   };
 
   return (
-    <header className="w-full font-sans">
+    <header className="w-full font-sans sticky top-0 z-50">
       <style>{`
         @keyframes scroll {
           0% { transform: translateX(0); }
@@ -105,12 +107,14 @@ const Navbar = ({ activeLink, setActiveLink }) => {
           <div className="flex items-center justify-end gap-1.5 sm:gap-3 shrink-0">
             <motion.button 
               initial="hidden" animate="visible" custom={8} variants={dropIn}
+              onClick={() => handleNavClick('Contact Us', 'contact-us', 'Publisher')}
               className="bg-white text-black px-3 sm:px-5 md:px-7 py-2 md:py-3 rounded-full text-[10px] sm:text-xs md:text-md font-semibold hover:bg-gray-200 active:scale-95 transition-all shadow-lg whitespace-nowrap"
             >
               Publisher
             </motion.button>
             <motion.button 
               initial="hidden" animate="visible" custom={9} variants={dropIn}
+              onClick={() => handleNavClick('Contact Us', 'contact-us', 'Buyer')}
               className="bg-white text-black px-3 sm:px-5 md:px-7 py-2 md:py-3 rounded-full text-[10px] sm:text-xs md:text-md font-semibold hover:bg-gray-200 active:scale-95 transition-all shadow-lg whitespace-nowrap"
             >
               Buyer
@@ -161,11 +165,11 @@ const Navbar = ({ activeLink, setActiveLink }) => {
       >
         <div className="animate-marquee-custom px-4">
           We're onboarding new publishers for SSDI CPA, ACA CPA/CPL & FE CPL campaigns... &nbsp;&nbsp; | &nbsp;&nbsp;
-          <span className="underline cursor-pointer">Contact Us.</span> &nbsp;&nbsp; | &nbsp;&nbsp;
+          <span onClick={() => handleNavClick('Contact Us', 'contact-us')} className="underline cursor-pointer font-semibold">Contact Us.</span> &nbsp;&nbsp; | &nbsp;&nbsp;
         </div>
         <div className="animate-marquee-custom px-4">
           We're onboarding new publishers for SSDI CPA, ACA CPA/CPL & FE CPL campaigns... &nbsp;&nbsp; | &nbsp;&nbsp;
-          <span className="underline cursor-pointer">Contact Us.</span> &nbsp;&nbsp; | &nbsp;&nbsp;
+          <span onClick={() => handleNavClick('Contact Us', 'contact-us')} className="underline cursor-pointer font-semibold">Contact Us.</span> &nbsp;&nbsp; | &nbsp;&nbsp;
         </div>
       </motion.div>
     </header>
