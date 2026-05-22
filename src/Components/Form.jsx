@@ -72,7 +72,7 @@ const ProposalSection = () => {
     setSubmissionStatus({ status: 'loading', message: 'Submitting your proposal request...' });
 
     try {
-      const response = await fetch('/Services/submit', {
+      const response = await fetch('https://three60quotesbackend.onrender.com/Services/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -70,7 +70,7 @@ const ContactUs = () => {
     setStatus({ type: 'loading', message: 'Submitting consultation request...' });
 
     try {
-      const response = await fetch('/Contact/submit', {
+      const response = await fetch('https://three60quotesbackend.onrender.com/Contact/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
