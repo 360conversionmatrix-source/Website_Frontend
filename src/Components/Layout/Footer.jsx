@@ -5,7 +5,6 @@ import { FaXTwitter } from 'react-icons/fa6';
 import img from '../../../src/assets/360.png';
 
 const Footer = () => {
-  // Animation Variants
   const containerVariants = {
     hidden: { opacity: 0, y: 50 },
     visible: {
@@ -24,7 +23,6 @@ const Footer = () => {
     visible: { opacity: 1, y: 0 }
   };
 
-  // Handles smooth scrolling down to specific single-page target sections
   const handleSmoothScroll = (e, sectionId) => {
     e.preventDefault();
     const element = document.getElementById(sectionId);
@@ -125,8 +123,9 @@ const Footer = () => {
             <h3 className="text-2xl font-bold mb-6">Company</h3>
             <ul className="space-y-4 text-blue-50 font-medium">
               <FooterLink label="About us" href="#about-us" onClick={(e) => handleSmoothScroll(e, 'about-us')} />
-              <FooterLink label="Privacy Policy" href="#" />
-              <FooterLink label="Terms and Conditions" href="#" />
+              {/* Uses direct system paths to ensure the App layout switcher intercepts correctly */}
+              <FooterLink label="Privacy Policy" href="/privacy-policy" isRouterLink={true} />
+              <FooterLink label="Terms and Conditions" href="/terms-and-conditions" isRouterLink={true} />
             </ul>
           </motion.div>
 
@@ -135,8 +134,8 @@ const Footer = () => {
              <h3 className="text-2xl font-bold mb-6">Contact</h3>
              <p className="text-sm text-blue-100 mb-4">Questions? Reach out to our strategy team for a consultation.</p>
              <button 
-               onClick={(e) => handleSmoothScroll(e, 'contact-us')}
-               className="text-xs font-semibold bg-white text-[#005a9c] px-4 py-2 rounded-lg hover:bg-cyan-100 transition-colors cursor-pointer border-none outline-none"
+                onClick={(e) => handleSmoothScroll(e, 'contact-us')}
+                className="text-xs font-semibold bg-white text-[#005a9c] px-4 py-2 rounded-lg hover:bg-cyan-100 transition-colors cursor-pointer border-none outline-none"
              >
                Get In Touch
              </button>
@@ -163,7 +162,6 @@ const Footer = () => {
   );
 };
 
-// Social icon component handling direct navigation target configurations securely
 const SocialIcon = ({ icon, href, onClick }) => (
   <motion.a 
     whileHover={{ scale: 1.2, rotate: 5 }}
@@ -178,18 +176,31 @@ const SocialIcon = ({ icon, href, onClick }) => (
   </motion.a>
 );
 
-// Standardised footer links
-const FooterLink = ({ label, href = "#", onClick }) => (
-  <li>
-    <motion.a 
-      whileHover={{ x: 5 }}
-      href={href} 
-      onClick={onClick}
-      className="hover:text-cyan-300 transition-colors cursor-pointer block"
-    >
-      {label}
-    </motion.a>
-  </li>
-);
+const FooterLink = ({ label, href = "#", onClick, isRouterLink = false }) => {
+  const linkClass = "hover:text-cyan-300 transition-colors cursor-pointer block";
+
+  const handleLinkClick = (e) => {
+    if (isRouterLink) {
+      e.preventDefault();
+      // Directly assign the URL location window to force the custom App.jsx layout interceptor to react immediately
+      window.location.href = href;
+    } else if (onClick) {
+      onClick(e);
+    }
+  };
+
+  return (
+    <li>
+      <motion.a 
+        whileHover={{ x: 5 }}
+        href={href} 
+        onClick={handleLinkClick}
+        className={linkClass}
+      >
+        {label}
+      </motion.a>
+    </li>
+  );
+};
 
 export default Footer;

@@ -2,6 +2,11 @@ import { useEffect, useState } from 'react';
 import Navbar from './Components/Layout/Navbar.jsx';
 import Home from './Pages/Home.jsx';
 import Preloader from './Components/Layout/Loader.jsx';
+import PrivacyComponent from './Components/Privacy.jsx';
+import Terms from './Components/Terms.jsx';
+
+// 1. Import your chatbot component here'; // Adjust path if it is placed elsewhere
+// import AIChatBot from './Components/Layout/Bot.jsx'; // Adjust path if it is placed elsewhere
 
 function App() {
   const [activeLink, setActiveLink] = useState('Home');
@@ -11,10 +16,13 @@ function App() {
   // Track loading state
   const [loading, setLoading] = useState(true);
 
+  // Read current browser path location directly
+  const currentPath = window.location.pathname;
+
   // Automatically highlights the navbar link based on what section is on screen
   useEffect(() => {
-    // Prevent execution if page is still in the custom loading phase
-    if (loading) return; 
+    // Prevent execution if page is still in the custom loading phase or if we're on standalone legal pages
+    if (loading || currentPath === '/privacy-policy' || currentPath === '/terms-and-conditions') return; 
 
     const sections = document.querySelectorAll('section[id]');
     
@@ -49,14 +57,32 @@ function App() {
     sections.forEach((section) => observer.observe(section));
 
     return () => observer.disconnect();
-  }, [loading]); // Re-runs cleanly after loader vanishes
+  }, [loading, currentPath]); // Re-runs cleanly if path configuration modifies
 
   // If loading is true, ONLY show the preloader and nothing else
   if (loading) {
     return <Preloader onComplete={() => setLoading(false)} />;
   }
 
-  // Once loading is false (hits 100%), the actual website mounts cleanly
+  // 1. STANDALONE ROUTE: Render Privacy Component exclusively
+  if (currentPath === '/privacy-policy') {
+    return (
+      <div className="min-h-screen bg-white text-black p-6 md:p-12">
+        <PrivacyComponent />
+      </div>
+    );
+  }
+
+  // 2. STANDALONE ROUTE: Render Terms Component exclusively
+  if (currentPath === '/terms-and-conditions') {
+    return (
+      <div className="min-h-screen bg-white text-black p-6 md:p-12">
+        <Terms />
+      </div>
+    );
+  }
+
+  // 3. MAIN SITE ROUTE: The actual website layout mounts cleanly with Navbar
   return (
     <div className="min-h-screen flex flex-col bg-[#020617] text-white selection:bg-[#0077c8]/30">
       {/* Sticky top container holding our synchronized Navbar */}
@@ -75,8 +101,12 @@ function App() {
           setSelectedService={setSelectedService}
         />
       </main>
+
+      {/* 2. Placed right at the bottom of your main layout. 
+          It stays minimized automatically until clicked. */}
+      {/* <AIChatBot /> */}
     </div>
   );
 }
 
-export default App;
+export default App; 
